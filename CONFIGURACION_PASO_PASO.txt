@@ -1,0 +1,92 @@
+=================================================
+
+***Router R1 (AS 65001)***
+
+conf t
+!
+int g0/0
+ ip address 10.1.1.1 255.255.255.0
+ no shut
+!
+int s0/0/0
+ ip address 192.168.10.1 255.255.255.252
+ clock rate 64000
+ no shut
+!
+int s0/0/1
+ ip address 192.168.20.1 255.255.255.252
+ no shut
+!
+router bgp 65001
+ no auto-summary
+ network 10.1.1.0 mask 255.255.255.0
+ neighbor 192.168.10.2 remote-as 65010     ! ISP1
+ neighbor 192.168.20.2 remote-as 65002     ! R2
+end
+
+=================================================
+
+conf t
+!
+int g0/0
+ ip address 200.1.1.1 255.255.255.0
+ no shut
+!
+int s0/0/0
+ ip address 192.168.10.2 255.255.255.252
+ no shut
+!
+router bgp 65010
+ no auto-summary
+ network 200.1.1.0 mask 255.255.255.0
+ neighbor 192.168.10.1 remote-as 65001    ! R1
+end
+
+=================================================
+
+***Router R2 (AS 65002)***
+
+conf t
+!
+int g0/0
+ ip address 10.2.2.1 255.255.255.0
+ no shut
+!
+int s0/0/0
+ ip address 192.168.20.2 255.255.255.252
+ no shut
+!
+int s0/0/1
+ ip address 192.168.30.1 255.255.255.252
+ no shut
+!
+router bgp 65002
+ no auto-summary
+ network 10.2.2.0 mask 255.255.255.0
+ neighbor 192.168.20.1 remote-as 65001     ! R1
+ neighbor 192.168.30.2 remote-as 65020     ! ISP2
+end
+
+=================================================
+
+conf t
+!
+int g0/0
+ ip address 200.2.2.1 255.255.255.0
+ no shut
+!
+int s0/0/0
+ ip address 192.168.30.2 255.255.255.252
+ no shut
+!
+router bgp 65020
+ no auto-summary
+ network 200.2.2.0 mask 255.255.255.0
+ neighbor 192.168.30.1 remote-as 65002    ! R2
+end
+
+==================================================
+
+
+en
+show ip bgp summary
