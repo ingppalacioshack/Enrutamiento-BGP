@@ -20,7 +20,7 @@ int s0/0/1
 router bgp 65001
  no auto-summary
  network 10.1.1.0 mask 255.255.255.0
- neighbor 192.168.10.2 remote-as 65010     ! ISP1
+ neighbor 192.168.10.2 remote-as 65010     ! ISP 1
  neighbor 192.168.20.2 remote-as 65002     ! R2
 end
 
@@ -91,3 +91,4 @@ end
 en
 
 show ip bgp summary
+
